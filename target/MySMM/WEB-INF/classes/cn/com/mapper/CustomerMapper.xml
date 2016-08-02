@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.dao.CustomerMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.bean.Customer" >
+    <id column="customer_id" property="customer_id" jdbcType="SMALLINT" />
+    <result column="store_id" property="store_id" jdbcType="TINYINT" />
+    <result column="first_name" property="first_name" jdbcType="VARCHAR" />
+    <result column="last_name" property="last_name" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <!-- <result column="address_id" property="address_id" jdbcType="SMALLINT" /> -->
+    <result column="active" property="active" jdbcType="BIT" />
+    <result column="create_date" property="create_date" jdbcType="TIMESTAMP" />
+    <result column="last_update" property="last_update" jdbcType="TIMESTAMP" />
+    <association property="address_id" column="address_id" jdbcType="cn.com.bean.Address">
+     <id column="address_id" property="address_id" jdbcType="SMALLINT" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="address2" property="address2" jdbcType="VARCHAR" />
+    <result column="district" property="district" jdbcType="VARCHAR" />
+    <result column="city_id" property="city_id" jdbcType="SMALLINT" />
+    <result column="postal_code" property="postal_code" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="last_update" property="last_update" jdbcType="TIMESTAMP" />
+    </association>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    customer_id, store_id, first_name, last_name, email, address_id, active, create_date, 
+    last_update
+  </sql>
+  
+  <select id="SelectCustomerByID" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from customer
+    where customer_id = #{customer_id,jdbcType=SMALLINT}
+  </select>
+  
+  <delete id="delete" parameterType="java.lang.Short" >
+    delete from customer
+    where customer_id = #{customer_id,jdbcType=SMALLINT}
+  </delete>
+  
+  <insert id="addCustomer" parameterType="cn.com.bean.Customer" >
+    insert into customer (customer_id, store_id, first_name, 
+      last_name, email, address_id, 
+      active, create_date, last_update
+      )
+    values (#{customer_id,jdbcType=SMALLINT}, #{store_id,jdbcType=TINYINT}, #{first_name,jdbcType=VARCHAR}, 
+      #{last_name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{address_id,jdbcType=SMALLINT}, 
+      #{active,jdbcType=BIT}, #{create_date,jdbcType=TIMESTAMP}, #{last_update,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+  <update id="updateCustomer" parameterType="cn.com.bean.Customer" >
+    update customer
+    set store_id = #{store_id,jdbcType=TINYINT},
+      first_name = #{first_name,jdbcType=VARCHAR},
+      last_name = #{last_name,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      address_id = #{address_id,jdbcType=SMALLINT},
+      active = #{active,jdbcType=BIT},
+      create_date = #{create_date,jdbcType=TIMESTAMP},
+      last_update = #{last_update,jdbcType=TIMESTAMP}
+    where customer_id = #{customer_id,jdbcType=SMALLINT}
+  </update>
+  
+</mapper>
